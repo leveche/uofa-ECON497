@@ -1,0 +1,39 @@
+#+TITLE: ECON 497
+#+SUBTITLE: Econometric Methods
+#+AUTHOR: %%AUTHOR%% | %%STUDID%%
+#+DATE: originally set on February 26^{th}, 2021
+
+#+LaTeX_CLASS_OPTIONS: [article,letterpaper,times,10pt,margin=0.7in]
+#+LATEX_HEADER: \usepackage[margin=0.7in]{geometry}
+#+LaTeX_HEADER: \usepackage{lastpage}
+#+LATEX_HEADER: \usepackage{fancyhdr}
+#+LATEX_HEADER: \usepackage{amsmath}
+#+LATEX_HEADER: \usepackage{bbm}
+#+LATEX_HEADER: \pagestyle{fancy}
+#+LATEX_HEADER: \chead{}%%AUTHOR%% | %%STUDID%%}
+#+LATEX_HEADER: \lhead{total pages: \pageref{LastPage}}
+#+LATEX_HEADER: \rhead{this is page \thepage}
+#+LATEX_HEADER: \lfoot{}
+#+LATEX_HEADER: \cfoot{ECON 497 Winter 2022}
+#+LATEX_HEADER: \rfoot{}
+#+LATEX: \renewcommand{\footrulewidth}{0.4pt}
+
+#+LATEX: \linespread{1.5}
+
+
+* Sample Midterm Exam 2021 WS
+** Question 1
+For iid sample of size $n$ drawn from population $X$ with $E[X]=\mu < \infty$, $V[X] = \sigma^2 < \infty$, let
+\begin{equation*}
+\begin{aligned}
+\hat{\mu_1} &:= \frac{1}{n-1}\sum_1^n x_i \\
+\hat{\mu_2} &:= \alpha \frac{\sum_1^k x_i}{k} + \beta \frac{\sum_{k+1}^n x_i}{n-k}
+\end{aligned}
+\end{equation*}
+with $0 < k < n$, $0 < \alpha,\beta < 1$, $\alpha + \beta = 1$.
+
+*** TL;DR
+| estimator $\hat{\mu}$ \ properties | $E[\hat{\mu}]$     | $V[\hat{\mu}]/\sigma^2$                                            | unbiased? | BLUE        | p-$\lim$        | consistent? |
+|------------------------------------+--------------------+--------------------------------------------------------------------+-----------+-------------+-----------------+-------------|
+| $\hat{\mu_1}$                      | $\frac{n}{n-1}\mu$ | $\left(\frac{n-1}{n}\right)^2$                                     | *no*      | no - biased | $\delta(x-\mu)$ | yes         |
+| $\hat{\mu_2}$                      | $\mu$              | $\frac{\alpha^2}{k} + \frac{\beta^2}{n-k} \geq \frac{\alpha^2}{k}$ | yes       | no          |                 | *no*        |
