@@ -33,7 +33,9 @@ matches the SLR expresisons:
 First, \[X^TX = \begin{pmatrix} \sum_1^n 1 & \sum x_i \\ \sum x_i & \sum x_i^2 \end{pmatrix} = n \begin{pmatrix} 1 & \bar{x} \\ \bar{x} & \bar{x^2} \end{pmatrix} \]
 
 And since $\begin{pmatrix} a & b\\b & c\end{pmatrix}^{-1} = \Delta^{-1}\begin{pmatrix} c & -b \\ -b & a \end{pmatrix}$ with the determinant $\Delta := ac - b^2$, we have[fn::We use a standard convention of denoting the realized sample value of a statistic $T$ by its lowecase $t$, so e.g. $n\bar{x} := \sum{x_i}, \ n\bar{x_i^2} := \sum x_i^2$]
-\begin{equation}\label{XTX}
+
+#+NAME: XTX
+\begin{equation}
 (X^T X)^{-1} = \frac{1}{n(\bar{x_i} - \bar{x}^2)} \begin{pmatrix} \bar{x^2} & -\bar{x} \\ -\bar{x} & 1\end{pmatrix}
 \end{equation}
 
@@ -41,8 +43,9 @@ Further, \[X^T y = \begin{pmatrix}n\bar{y}\\ \sum x_i y_i\end{pmatrix}\]
 So that \[\hat{\beta} = \begin{pmatrix} \hat{\beta_0} \\ \hat{\beta_1} \end{pmatrix} = \Delta^{-1} \begin{pmatrix}n\bar{y}\bar{x^2} - \bar{x}\sum{x_i y_i} \\ \sum x_i y_i - n\bar{x}\bar{y}\end{pmatrix} = \frac{1}{n(\bar{x^2}-\bar{x}^2)}\begin{pmatrix}n\bar{y}\bar{x^2} - \bar{x}\sum{x_i y_i} \\ \sum x_i y_i - n\bar{x}\bar{y}\end{pmatrix} \]
 
 Simple rearrangement will yield for the denominator
-\begin{equation}\label{beta-denominator}
-\sum(x_i-\bar{x})^2 = \sum x_i^2 - 2\bar{x}\sum{x_i} + x\bar{x}^2 = n(\bar{x^2} - \bar{x}^2)
+#+NAME: beta-denominator
+\begin{equation}
+\sum(x_i-\bar{x})^2 = \sum x_i^2 - 2\bar{x}\sum{x_i} + n\bar{x}^2 = n(\bar{x^2} - \bar{x}^2)
 \end{equation}
 
 Furthermore, by centralizing $u_i := x_i - \bar{x},\ v_i := y_i - \bar{y}$ so that $\bar{u} = \bar{v} = 0$, we have \[\sum u_i v_i = \sum(x_i - \bar{x})(y_i - \bar{y}) = \sum u_i (y_i - \bar{y}) = \sum u_i y_i - n\bar{u}\bar{y} = \sum x_i y_i - n\bar{x}\bar{y} \]
@@ -50,7 +53,7 @@ Together, the two expressions above mean we have derived $\hat{\beta_1}$ in the 
 So that \[\hat{\beta_0} = \frac{n\bar{y}\bar{x^2} - \bar{x}\sum{x_i y_i}}{n(\bar{x^2} - \bar{x}^2)} = -\bar{x} \frac{\sum x_i y_i - n \bar{x}\bar{y}}{n(\bar{x^2}-\bar{x}^2)} + \frac{n\bar{y}\bar{x^2}-n\bar{x}^2\bar{y}}{n(\bar{x^2} - \bar{x}^2)} = \bar{y} - \hat{\beta_1}\bar{x}\]
 
 ** Q1b
-Equations \ref{XTX} and \ref{beta-denominator} together yield immediately
-\[\frac{\mathbbm{V}[\hat{\beta_0}]}{\sigma^2} = frac{\bar{x^2}}{\sum (x_i - \bar{x})^2}\] and
+Equations [[XTX]] and [[beta-denominator]] together yield immediately
+\[\frac{\mathbbm{V}[\hat{\beta_0}]}{\sigma^2} = \frac{\bar{x^2}}{\sum (x_i - \bar{x})^2}\] and
 \[\frac{\mathbbm{V}[\hat{\beta_1}]}{\sigma^2} = \frac{1}{\sum(x_i-\bar{x})^2}
 \]
