@@ -63,8 +63,12 @@ Model: \[y = X\beta + \epsilon = X \begin{pmatrix}\beta_1\\ \beta_2 \\ \beta_3 \
 Null hypothesis: $H_0: \beta_2 = \beta_2$, alterntive $H_a: \beta_2 \neq 0$ or $\beta_3 \neq 0$.
 ** Q2a
 In matrix form, $H_0$ is written as \[\begin{pmatrix}0 & 1 & 0& 0\\ 0 & 0 & 1 & 0 \end{pmatrix} \begin{pmatrix}\beta_1 \\ \beta_2 \\ \beta_3 \\ \beta_4 \end{pmatrix} = \begin{pmatrix}0\\ 0\end{pmatrix}\]
+Under $H_0$, the statistic \[F := \frac{(R\hat{\beta})^T[R(X^T X)R^T]^{-1}(R\hat{\beta})/2}{SSR/(n-4)} = \frac{(RSS_r - RSS_{ur})/2}{RSS/(n-4)}\]
+is distributed as $F^2_{n-4}$.
 ** Q2b
-
+The statistic \[F = \frac{(RSS_r - RSS_{ur})/q}{RSS_{ur}/(n-k)}\] is $F^q_{n-k}$-distributed.
+In this example, $n=104, k=4, q=2, RSS_r = 86, RSS_{ur}=79$. Subsitute to obtain the value of the F-statistic \[F = 4.430\]
+The critical value at 5% significance, however[fn::see Appendix for R code], is $F^* = 3.087 < 4.430$, so that we reject the null hypothesis; the restriction of the model is not supported by the sample.
 ** Q2c
 In matrix form, $H_0$ is written as \[\begin{pmatrix}0 & 1 & 0& -1\\ 0 & 0 & 1 & 0 \end{pmatrix} \begin{pmatrix}\beta_1 \\ \beta_2 \\ \beta_3 \\ \beta_4 \end{pmatrix} = \begin{pmatrix}3\\ 0\end{pmatrix}\]
 * Q3
@@ -81,3 +85,73 @@ with $0 < k < n$, $0 < \alpha,\beta < 1$, $\alpha + \beta = 1$. Here, $\alpha = 
 |------------------------------------+--------------------+--------------------------------------------------------------------+-----------+------------+-----------------+-------------|
 | $\hat{\mu_1}$                      | $\frac{n}{n-5}\mu$ | $\left(\frac{n-5}{n}\right)^2$                                     | *no*      | no; biased | $\delta(x-\mu)$ | yes         |
 | $\hat{\mu_2}$                      | $\mu$              | $\frac{\alpha^2}{k} + \frac{\beta^2}{n-k} \geq \frac{\alpha^2}{k}$ | yes       | no         |                 | *no*        |
+
+* Q4
+a. The regression coefficients are given in the table below, the code and R output are in the Appendix
+   | model ($j=$) | intercept $\alpha_j$ | $\beta_j$ | $R^2$ |
+   |--------------+----------------------+-----------+-------|
+   |            1 |                0.246 |     1.112 | 0.610 |
+   |           10 |              -0.0330 |     0.928 | 0.946 |
+b. The coefficients $\beta$ here measure how closely the portfolo performance track the market as a whole; we see that the smaller-capitalization stock portfolio has greater relative gains and losses than the market average, whereas the large-cap portfolio has smaller.
+c. The $R^2$ gives a measure of how much of the variability of the regressand is explained by the variability of the regressor. In this example, we see that model 1 has relatively low $R^2$, indicating greater volatility in the low-cap segment, especially compared with the 'blue-chip' segment with its high value of $R^2$. However, we must be wary of selection bias here: there are fewer high-cap stocks than low-cap, which means that most major indices, as well as the market proxy /rmrf/ we are using, will include the /d10/ portfolio; on the other hand, not many members of the /d1/ portfolio are likely to be included in /rmrf/. Near-perfect $R^2$ of model 10 could therefore be an artefact.
+d. The t-statistic \[t := \frac{\beta - \hat{\beta}}{se(\beta)}\]
+   is distributed as $t_{n-1}$ provided $\hat{\beta}$ is normally distributed, $se^2(\beta)$ is $\chi^2_{n-1}$.
+* Appendix - R code
+\tiny
+** Q2
+#+begin_example
+> qf(0.95,df1=2,df2=100)
+[1] 3.087296
+#+end_example
+** Q4
+#+begin_example
+> assets <- read.csv('assets.csv')
+
+> assets['r1'] <- assets['d1'] - assets['rf']
+> assets['r10'] <- assets['d10'] - assets['rf']
+> lm1 <- lm(r1 ~ rmrf, data = assets)
+> lm10 <- lm(r10 ~ rmrf, data = assets)
+
+> summary(lm1)
+
+Call:
+lm(formula = r1 ~ rmrf, data = assets)
+
+Residuals:
+     Min       1Q   Median       3Q      Max
+-16.5835  -2.4291  -0.1376   1.8861  25.8655
+
+Coefficients:
+            Estimate Std. Error t value Pr(>|t|)
+(Intercept)  0.24583    0.16316   1.507    0.132
+rmrf         1.11223    0.03602  30.880   <2e-16 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 4.017 on 610 degrees of freedom
+  (1 observation deleted due to missingness)
+Multiple R-squared:  0.6099,    Adjusted R-squared:  0.6092
+F-statistic: 953.6 on 1 and 610 DF,  p-value: < 2.2e-16
+
+> summary(lm10)
+
+Call:
+lm(formula = r10 ~ rmrf, data = assets)
+
+Residuals:
+    Min      1Q  Median      3Q     Max
+-5.5580 -0.5735  0.0090  0.6221  5.6962
+
+Coefficients:
+             Estimate Std. Error t value Pr(>|t|)
+(Intercept) -0.033040   0.040662  -0.813    0.417
+rmrf         0.927640   0.008976 103.346   <2e-16 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 1.001 on 610 degrees of freedom
+  (1 observation deleted due to missingness)
+Multiple R-squared:  0.946,     Adjusted R-squared:  0.9459
+F-statistic: 1.068e+04 on 1 and 610 DF,  p-value: < 2.2e-16
+
+#+end_example
